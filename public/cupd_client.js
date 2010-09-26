@@ -7,6 +7,14 @@
  */
 
 
+
+/*
+ * Define global variables
+ */
+
+var widgets = {};
+
+
 /*
  * Define the websocket callbacks
  */
@@ -21,6 +29,21 @@ var websocket_onclose = function(event) {
 
 var websocket_onmessage = function(event) {
     console.log('Message received through websocket.');
+
+    /* This message must be JSON-formatted (specs) */
+    var message = JSON.parse(event.data);
+
+    if (message.type == 'new_widget') {
+        var name = message.name;
+        var code = message.code; // This is the plugin code written by the dev
+
+        var new_widget = new Widget(name);
+        new_widget.incoming_data = code.incoming_data;
+        new_widget.refresh = code.refresh;
+
+        widgets[name] = new_widget;
+        widgets[name].refresh();
+    }
 }
 
 var websocket_onerror = function(event) {
@@ -28,6 +51,17 @@ var websocket_onerror = function(event) {
 }
 
 
+/*
+ * Define the widget object
+ */
+
+function Widget(name) {
+    /* Retain its name */
+    this.name = name;
+    /* Create a new div to display in */
+    $('body').append("<div class='widget' id='"+this.name+"'></div>");
+
+}
 
 /*
  * Callbacks triggered when the webpage is fully loaded. Used to initiate most

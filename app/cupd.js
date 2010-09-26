@@ -1,4 +1,15 @@
-/* Libraries loading */
+/*
+ * This is the server-side javascript code of cupd.
+ *
+ * Required libraries (ie, not built-in):
+ *  - nodejs
+ *  - expressjs
+ */
+
+
+/*
+ * Load the neeed libraries.
+ */
 var fs = require('fs');
 var sys = require('sys');
 var express = require('express');
@@ -6,10 +17,19 @@ var haml = require('../lib/haml');
 var websocket = require('../lib/ws');
 
 
-/* Create the central application based on Express */
+/*
+ * Create the central application based on Express
+ */
+
 var app = express.createServer();
 
-/* Load the configuration */
+
+/*
+ * Load the configuration according to the NODE_ENV variable. If NODE_ENV is
+ * not provided, the fallback value is 'development'. The environement name is
+ * used to grab the /config/<NODE_ENV>.js file.
+ */
+
 var environment = 'development';
 if ('NODE_ENV' in process.env) {
     environment = process.env['NODE_ENV'];
@@ -25,7 +45,14 @@ for (variable_name in configuration) {
 }
 
 
-/* Create the Websocket server */
+/*
+ * Create the websocket server and define its callbacks. Those are:
+ *  - connection: triggered when a new connection is established.
+ *  - close: triggered when a connection is closed (either properly or not).
+ *  - messsage: triggered when a message is received from a client. According
+ *      to the specs, it must be JSON-formatted.
+ */
+
 var websocket_connections = [];
 var websocket_server = websocket.createServer();
 
@@ -47,24 +74,42 @@ websocket_server.addListener('message', function(conn){
     /* Not used for now */
 
     /* Note: it will probably be used in order to let the users (admins?) set
-     * the configuration live.
-     */
+     * the configuration live. */
 
     console.log('[websocket] message received!');
 });
 
-/* Let's load the plugins */
-var plugins = new Array();
+
+/*
+ * Load the plugins into the 'plugins' variable. This variable is used as
+ * a hash, associating the name of the plugin to its code.
+ */
+
+var plugins = {};
 for (index in app.set('plugins')) {
     var plugin_name = app.set('plugins')[index];
     console.log("* Loading plugin " + plugin_name);
+
+    var plugin_code = require('../plugins/'+plugin_name+'/'+plugin_name);
+    plugins[plugin_name] = plugin_code;
 }
 
-/* Set the static files path */
-app.use(express.staticProvider(__dirname + '/../public'));
-console.log(__dirname);
 
-/* This is the dashboard by itself */
+/*
+ * Configure the Express server static files. Those are actually:
+ *  - jquery
+ *  - the cupd client javascript library (cupd_client.js)
+ *  - the dashboard.css file
+ */
+
+app.use(express.staticProvider(__dirname + '/../public'));
+
+
+/*
+ * Configure the views of the Express server.
+ */
+
+/* / maps to the dashboard by itself. */
 app.get('/', function(req, res){
     res.render('dashboard.haml', {
         locals: {
@@ -74,7 +119,11 @@ app.get('/', function(req, res){
 });
 
 
-/* Start to listen on the given port */
+/*
+ * Make the different servers to start listening on their respective ports (see
+ * the /config/ files for more informations on settings.
+ */
+
 websocket_server.listen(app.set('websocket_port'));
 app.listen(app.set('web_port'));
 
