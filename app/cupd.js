@@ -4,6 +4,13 @@
  * Required libraries (ie, not built-in):
  *  - nodejs
  *  - expressjs
+ *
+ * You can start the cupd server with the following command:
+ *  node app/cupd.js
+ *
+ * Side note:
+ *  The '__dirname' variable is set by nodejs. It contains the absolute
+ *  filesystem path to this very script (cupd.js).
  */
 
 
