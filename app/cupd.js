@@ -94,22 +94,7 @@ websocket_server.addListener('connection', function(conn){
         var json_message = JSON.stringify(js_message);
         conn.send(json_message);
 
-/*        var plugin_code = plugins[plugin_name];
-
-        var js_message = {};
-        js_message.type = 'new_widget';
-        js_message.code = plugin_code;
-
-        
-        console.log(js_message);
-
-        var json_message = JSON.stringify(js_message);
-        // TODO BUG HERE json_message is empty
-        console.log(json_message);
-
-        conn.send(json_message);
         console.log('sent');
-*/
     }
 });
 

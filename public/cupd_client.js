@@ -66,20 +66,15 @@ var websocket_onerror = function(event) {
  */
 
 function Widget(name) {
+    console.log('Creating widget ' + name);
     /* Retain its name */
     this.name = name;
     /* Create a new div to display in */
     $('body').append("<div class='widget' id='"+this.name+"'></div>");
 
-
     /* Grab its loaded code base */
-    console.log(code_base);
-    console.log(this.name);
     var code = code_base[name];
-    console.log('code:');
-    console.log(code);
-    delete code_base[this.name];
-
+    
     /* Associate the given code */
     this.refresh = code.refresh;
     this.update = code.update;
