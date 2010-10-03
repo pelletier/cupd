@@ -8,20 +8,31 @@
  * You can start the cupd server with the following command:
  *  node app/cupd.js
  *
- * Side note:
+ * Side notes:
+ *
  *  The '__dirname' variable is set by nodejs. It contains the absolute
  *  filesystem path to this very script (cupd.js).
+ *
+ *  The app.set() function used with only one argument actually means "get the
+ *  configuration setting for key foo".
  */
 
 
 /*
  * Load the neeed libraries.
  */
+
 var fs = require('fs');
 var sys = require('sys');
 var express = require('express');
 var haml = require('../lib/haml');
 var websocket = require('../lib/ws');
+
+/*
+ * Script-wide variables
+ */
+
+var plugins = {};
 
 
 /*
@@ -68,12 +79,44 @@ websocket_server.addListener('connection', function(conn){
     /* Store the connection for later */
     console.log('[websocket] New connection.');
     websocket_connections.push(conn.id);
+
+    /* As this is a new connection, we have to send to the client the source
+     * code of every plugins. */
+    console.log('starting to send plugins');
+    for (plugin_name in plugins) {
+        console.log('sending '+plugin_name);
+
+        var js_message = {};
+        js_message.name = plugin_name;
+        js_message.type = 'new_widget';
+        js_message.uri = "http://192.168.0.42:3000/widget/"+plugin_name+"/";
+
+        var json_message = JSON.stringify(js_message);
+        conn.send(json_message);
+
+/*        var plugin_code = plugins[plugin_name];
+
+        var js_message = {};
+        js_message.type = 'new_widget';
+        js_message.code = plugin_code;
+
+        
+        console.log(js_message);
+
+        var json_message = JSON.stringify(js_message);
+        // TODO BUG HERE json_message is empty
+        console.log(json_message);
+
+        conn.send(json_message);
+        console.log('sent');
+*/
+    }
 });
 
 websocket_server.addListener('close', function(conn){
     /* Remove the connection from the current ones */
     var idx = websocket_connections.indexOf(conn.id);
-    if(idx != -1) websocket_connection.splice(idx, 1);
+    if(idx != -1) websocket_connections.splice(idx, 1);
     console.log('[websocket] A connection closed.');
 });
 
@@ -92,7 +135,6 @@ websocket_server.addListener('message', function(conn){
  * a hash, associating the name of the plugin to its code.
  */
 
-var plugins = {};
 for (index in app.set('plugins')) {
     var plugin_name = app.set('plugins')[index];
     console.log("* Loading plugin " + plugin_name);
@@ -125,6 +167,32 @@ app.get('/', function(req, res){
     });
 });
 
+/* /widget/<name> returns the complete client-side javascript code for the
+ * given widget */
+app.get('/widget/:name', function(req, res){
+    var name = req.params.name;
+    var read_stream = fs.createReadStream(__dirname + '/../plugins/'+name+'/widget.js');
+
+    read_stream.setEncoding('utf8');
+
+    read_stream.addListener("open", function(fd){
+        res.writeHead(200, {"Content-type": "text/javascript"});
+    });
+
+    read_stream.addListener("data", function(data){
+        res.write(data);
+    });
+
+    read_stream.addListener("error", function(err){
+        res.writeHead(500, {"Content-type": "text/plain"});
+        res.write("OMG han error happnzz" + err);
+        res.close();
+    });
+
+    read_stream.addListener("close", function(){
+        res.close();
+    });
+});
 
 /*
  * Make the different servers to start listening on their respective ports (see

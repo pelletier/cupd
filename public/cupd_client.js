@@ -13,6 +13,16 @@
  */
 
 var widgets = {};
+var code_base = new Object();
+
+
+/*
+ * Define some handsome functions
+ */
+
+function dynamic_load_js(uri, callback){
+    $.getScript(uri, callback);
+}
 
 
 /*
@@ -21,11 +31,11 @@ var widgets = {};
 
 var websocket_onopen = function(event) {
     console.log('Websocket connection opened.');
-}
+};
 
 var websocket_onclose = function(event) {
     console.log('Websocket connection closed.');
-}
+};
 
 var websocket_onmessage = function(event) {
     console.log('Message received through websocket.');
@@ -35,20 +45,20 @@ var websocket_onmessage = function(event) {
 
     if (message.type == 'new_widget') {
         var name = message.name;
-        var code = message.code; // This is the plugin code written by the dev
+        var uri = message.uri;
 
-        var new_widget = new Widget(name);
-        new_widget.incoming_data = code.incoming_data;
-        new_widget.refresh = code.refresh;
+        dynamic_load_js(uri, function(){
+            var new_widget = new Widget(name);
+            widgets[name] = new_widget;
+            widgets[name].refresh();
 
-        widgets[name] = new_widget;
-        widgets[name].refresh();
+        });
     }
-}
+};
 
 var websocket_onerror = function(event) {
     console.log('Websocket error happened:' + event.data);
-}
+};
 
 
 /*
@@ -61,6 +71,18 @@ function Widget(name) {
     /* Create a new div to display in */
     $('body').append("<div class='widget' id='"+this.name+"'></div>");
 
+
+    /* Grab its loaded code base */
+    console.log(code_base);
+    console.log(this.name);
+    var code = code_base[name];
+    console.log('code:');
+    console.log(code);
+    delete code_base[this.name];
+
+    /* Associate the given code */
+    this.refresh = code.refresh;
+    this.update = code.update;
 }
 
 /*
@@ -81,6 +103,5 @@ $(document).ready(function(){
     websocket.onclose = websocket_onclose;
     websocket.onmessage = websocket_onmessage;
     websocket.onerror = websocket_onerror;
-
     
 });
