@@ -31,6 +31,27 @@ var haml = require('../lib/haml');
 var websocket = require('../lib/ws');
 
 
+
+/*
+ * UUID generator
+ */
+
+function createUUID() {
+    // http://www.ietf.org/rfc/rfc4122.txt
+    // http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript
+    var s = [];
+    var hexDigits = "0123456789ABCDEF";
+    for (var i = 0; i < 32; i++) {
+        s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+    }
+    s[12] = "4";  // bits 12-15 of the time_hi_and_version field to 0010
+    s[16] = hexDigits.substr((s[16] & 0x3) | 0x8, 1);  // bits 6-7 of the clock_seq_hi_and_reserved to 01
+
+    var uuid = s.join("");
+    return uuid;
+}
+
+
 /*
  * Script-wide variables
  */
@@ -66,6 +87,80 @@ for (variable_name in configuration) {
 
 
 /*
+ * Create the services-side websocket server and define its callbacks.
+ */
+
+var websocket_services_server = websocket.createServer();
+
+
+websocket_services_server.addListener('connection', function(conn){
+
+    var uid = createUUID();
+    conn.storage.set('uid', uid);
+    conn.storage.set('authenticated', false);
+    var message = { 'uid': uid };
+    conn.send( JSON.stringify(message) );
+
+
+    conn.addListener('message', function(message){
+        var output = {};
+
+        function must_authenticate() {
+            if (conn.storage.get('authenticated') == false) {
+                output.type = 'error';
+                output.message = 'You must be authenticated';
+                throw 'end';
+            }
+        }
+
+
+        try{
+            if (message.uid != conn.storage.get('uid')) {
+                output.type = 'error';
+                output.message = 'Bad uid';
+                throw 'end';
+            }
+
+            switch (message.type) {
+                case "auth":
+                    conn.storage.set('name', message.name); 
+                    break;
+
+                case "data":
+                    must_authenticate();
+
+                    var js_message = {};
+                    js_message.type = 'data';
+                    js_message.name = conn.storage.get('name');
+                    js_message.data = message.data;
+
+                    js_message = JSON.parse(js_message);
+
+                    websocket_dashboard_server.broadcast(js_message);
+                    output.type = 'success';
+                    output.message = 'Data sent to the clients';
+                    break;
+
+                default:
+                    output.type = 'error';
+                    output.message = 'Bad message type';
+                    throw 'end';
+                    break;
+            }
+        }
+        catch(err) {
+            if (err == 'end') {
+                conn.send( JSON.stringify(output) );
+            }
+            else {
+                sys.log(err);
+            }
+        }
+    });
+
+});
+
+/*
  * Create the websocket server and define its callbacks. Those are:
  *  - connection: triggered when a new connection is established.
  *  - close: triggered when a connection is closed (either properly or not).
@@ -73,14 +168,11 @@ for (variable_name in configuration) {
  *      to the specs, it must be JSON-formatted.
  */
 
-var websocket_connections = [];
-var websocket_server = websocket.createServer();
+var websocket_dashboard_server = websocket.createServer();
 
 /* Bind websocket callbacks */
-websocket_server.addListener('connection', function(conn){
-    /* Store the connection for later */
+websocket_dashboard_server.addListener('connection', function(conn){
     sys.log('[websocket] New connection.');
-    websocket_connections.push(conn.id);
 
     /* As this is a new connection, we have to send to the client the source
      * code of every plugins. */
@@ -102,20 +194,13 @@ websocket_server.addListener('connection', function(conn){
     }
 });
 
-websocket_server.addListener('close', function(conn){
+websocket_dashboard_server.addListener('close', function(conn){
     /* Remove the connection from the current ones */
-    var idx = websocket_connections.indexOf(conn.id);
-    if(idx != -1) websocket_connections.splice(idx, 1);
     sys.log('[websocket] A connection closed.');
 });
 
-websocket_server.addListener('message', function(conn){
-    /* Not used for now */
-
-    /* Note: it will probably be used in order to let the users (admins?) set
-     * the configuration live. */
-
-    sys.log('[websocket] message received!');
+websocket_dashboard_server.addListener('message', function(message){
+   /* Not used yet */ 
 });
 
 
@@ -187,7 +272,9 @@ app.get('/widget/:name', function(req, res){
  * the /config/ files for more informations on settings.
  */
 
-websocket_server.listen(app.set('websocket_port'));
+websocket_services_server.listen(app.set('websocket_services_port'));
+websocket_dashboard_server.listen(app.set('websocket_port'));
 app.listen(app.set('web_port'));
 
+sys.log("Listening...");
 
