@@ -89,7 +89,9 @@ websocket_server.addListener('connection', function(conn){
         var js_message = {};
         js_message.name = plugin_name;
         js_message.type = 'new_widget';
-        js_message.uri = "http://192.168.0.42:3000/widget/"+plugin_name+"/";
+        js_message.uri = "http://"+app.set('web_host')
+                            + ":" + app.set('web_port')
+                            + "/widget/" + plugin_name + "/";
 
         var json_message = JSON.stringify(js_message);
         conn.send(json_message);
