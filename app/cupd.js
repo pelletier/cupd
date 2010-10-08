@@ -53,9 +53,9 @@ if ('NODE_ENV' in process.env) {
     environment = process.env['NODE_ENV'];
 }
 
-console.log('Running in environment ' + environment);
+sys.log('Running in environment ' + environment);
 var configuration = require('../config/'+environment);
-console.log(configuration);
+sys.log(configuration);
 
 for (variable_name in configuration) {
     var value = configuration[variable_name];
@@ -77,14 +77,14 @@ var websocket_server = websocket.createServer();
 /* Bind websocket callbacks */
 websocket_server.addListener('connection', function(conn){
     /* Store the connection for later */
-    console.log('[websocket] New connection.');
+    sys.log('[websocket] New connection.');
     websocket_connections.push(conn.id);
 
     /* As this is a new connection, we have to send to the client the source
      * code of every plugins. */
-    console.log('starting to send plugins');
+    sys.log('starting to send plugins');
     for (plugin_name in plugins) {
-        console.log('sending '+plugin_name);
+        sys.log('sending '+plugin_name);
 
         var js_message = {};
         js_message.name = plugin_name;
@@ -96,7 +96,7 @@ websocket_server.addListener('connection', function(conn){
         var json_message = JSON.stringify(js_message);
         conn.send(json_message);
 
-        console.log('sent');
+        sys.log('sent');
     }
 });
 
@@ -104,7 +104,7 @@ websocket_server.addListener('close', function(conn){
     /* Remove the connection from the current ones */
     var idx = websocket_connections.indexOf(conn.id);
     if(idx != -1) websocket_connections.splice(idx, 1);
-    console.log('[websocket] A connection closed.');
+    sys.log('[websocket] A connection closed.');
 });
 
 websocket_server.addListener('message', function(conn){
@@ -113,7 +113,7 @@ websocket_server.addListener('message', function(conn){
     /* Note: it will probably be used in order to let the users (admins?) set
      * the configuration live. */
 
-    console.log('[websocket] message received!');
+    sys.log('[websocket] message received!');
 });
 
 
@@ -124,7 +124,7 @@ websocket_server.addListener('message', function(conn){
 
 for (index in app.set('plugins')) {
     var plugin_name = app.set('plugins')[index];
-    console.log("* Loading plugin " + plugin_name);
+    sys.log("* Loading plugin " + plugin_name);
 
     var plugin_code = require('../plugins/'+plugin_name+'/'+plugin_name);
     plugins[plugin_name] = plugin_code;
