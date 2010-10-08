@@ -24,9 +24,12 @@
 
 var fs = require('fs');
 var sys = require('sys');
+var Do = require('../lib/do');
+var events = require('events');
 var express = require('express');
 var haml = require('../lib/haml');
 var websocket = require('../lib/ws');
+
 
 /*
  * Script-wide variables
@@ -55,7 +58,6 @@ if ('NODE_ENV' in process.env) {
 
 sys.log('Running in environment ' + environment);
 var configuration = require('../config/'+environment);
-sys.log(configuration);
 
 for (variable_name in configuration) {
     var value = configuration[variable_name];
@@ -124,10 +126,9 @@ websocket_server.addListener('message', function(conn){
 
 for (index in app.set('plugins')) {
     var plugin_name = app.set('plugins')[index];
-    sys.log("* Loading plugin " + plugin_name);
+    sys.log("Loading plugin " + plugin_name);
 
-    var plugin_code = require('../plugins/'+plugin_name+'/'+plugin_name);
-    plugins[plugin_name] = plugin_code;
+    plugins[plugin_name] = {};
 }
 
 
