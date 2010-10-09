@@ -7,7 +7,7 @@ my_code = {};
 
 my_code.refresh = function(){
     var me = $('#'+this.name);
-    me.html("<h3>On #ubuntu...</h3><p></p>");
+    me.html("<h3>On #archlinux...</h3><p></p>");
     me.css('color', 'white');
 };
 

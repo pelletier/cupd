@@ -93,7 +93,7 @@ class IRC
 end
 
 
-irc = IRC.new('irc.freenode.net', 6667, 'cupd__', '#ubuntu')
+irc = IRC.new('irc.freenode.net', 6667, 'cupd__', '#archlinux')
 irc.connect()
 begin
   irc.main_loop()
