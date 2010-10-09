@@ -1,15 +1,19 @@
-.. Cupd documentation master file, created by
-   sphinx-quickstart on Sat Oct  9 19:26:41 2010.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+Cupd, real time dashboard
+=========================
 
-Welcome to Cupd's documentation!
-================================
+Cupd is a real time, nodejs-powered and websocket-based dashboard server. It
+exposes an API for services, which publish data, and embeds a small web server
+to display a dashboard to the real users. Basically, it allows you to plug any
+kind of data source (RSS feeds, IRC chat, web statistics, video streaming and
+so on) and broadcast it to an unlimited number of users, through an highly
+customizable dashboard interface.
 
 Contents:
 
 .. toctree::
    :maxdepth: 2
+   
+   services_api
 
 Indices and tables
 ==================

@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -7,8 +6,8 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Welcome to Cupd’s documentation! &mdash; Cupd v1.0 documentation</title>
-    <link rel="stylesheet" href="static/default.css" type="text/css" />
+    <title>Cupd, real time dashboard &mdash; Cupd v1.0 documentation</title>
+    <link rel="stylesheet" href="static/cupd.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -22,7 +21,8 @@
     <script type="text/javascript" src="static/jquery.js"></script>
     <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
-    <link rel="top" title="Cupd v1.0 documentation" href="#" /> 
+    <link rel="top" title="Cupd v1.0 documentation" href="#" />
+    <link rel="next" title="Services API" href="services_api.html" /> 
   </head>
   <body>
     <div class="related">
@@ -31,6 +31,9 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="services_api.html" title="Services API"
+             accesskey="N">next</a> |</li>
         <li><a href="#">Cupd v1.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
@@ -40,11 +43,22 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="welcome-to-cupd-s-documentation">
-<h1>Welcome to Cupd&#8217;s documentation!<a class="headerlink" href="#welcome-to-cupd-s-documentation" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="cupd-real-time-dashboard">
+<h1>Cupd, real time dashboard<a class="headerlink" href="#cupd-real-time-dashboard" title="Permalink to this headline">¶</a></h1>
+<p>Cupd is a real time, nodejs-powered and websocket-based dashboard server. It
+exposes an API for services, which publish data, and embeds a small web server
+to display a dashboard to the real users. Basically, it allows you to plug any
+kind of data source (RSS feeds, IRC chat, web statistics, video streaming and
+so on) and broadcast it to an unlimited number of users, through an highly
+customizable dashboard interface.</p>
 <p>Contents:</p>
 <div class="toctree-wrapper compound">
-<ul class="simple">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="services_api.html">Services API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="services_api.html#how-it-works">How it works</a></li>
+<li class="toctree-l2"><a class="reference internal" href="services_api.html#handshake">Handshake</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -65,12 +79,15 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Welcome to Cupd&#8217;s documentation!</a><ul>
+<li><a class="reference internal" href="#">Cupd, real time dashboard</a><ul>
 </ul>
 </li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 </ul>
 
+  <h4>Next topic</h4>
+  <p class="topless"><a href="services_api.html"
+                        title="next chapter">Services API</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="sources/index.txt"
@@ -92,15 +109,6 @@
         </div>
       </div>
       <div class="clearer"></div>
-    </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li><a href="#">Cupd v1.0 documentation</a> &raquo;</li> 
-      </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2010, Thomas Pelletier.
