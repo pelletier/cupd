@@ -48,5 +48,5 @@ while true do
   puts(">>> #{jsonified}")
 
   total_time = Time.now - start_time
-  sleep(5.0 - total_time)
+  sleep(1.0 - total_time)
 end
