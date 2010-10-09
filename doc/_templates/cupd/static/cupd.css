@@ -1,0 +1,40 @@
+@import url('monokai.css');
+
+body {
+    background-color: rgb(26, 28, 29);
+    color: white;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: Helvetica, sans-serif;
+}
+
+a {
+    color: rgb(250, 37, 115);
+}
+
+.related {
+    float: right;
+    border-left: 2px dashed rgb(128,128, 122);
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+.headerlink {
+    font-size: 0.7em;
+    margin-left: 1em;
+    text-decoration: none;
+    color: rgb(68, 68, 68);
+}
+
+h1 {
+    color: rgb(166, 227, 25);
+}
+
+.body {
+    margin-right: 300px;
+}
+
+.sphinxsidebarwrapper {
+    display: none;
+}
