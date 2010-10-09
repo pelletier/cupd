@@ -147,6 +147,7 @@ websocket_services_server.addListener('connection', function(conn){
     var message = { 'uid': uid, 'type': 'welcome' };
     conn.send( JSON.stringify(message) );
 
+    sys.log("  -> UID: " + uid);
 
     conn.addListener('message', function(message){
         var output = {};
