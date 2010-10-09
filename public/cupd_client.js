@@ -93,7 +93,19 @@ function Widget(name) {
  */
 
 $(document).ready(function(){
-    /* 
+    /*
+     * Oh wait! This is websocket dashboarding!
+     */
+
+    if ( !("WebSocket" in window) ){
+        $('body').prepend('<div id="nows" class="fail"></div>');
+        $('#nows').hide()
+                  .html("You browser does not support Websocket!")
+                  .fadeIn("slow");
+        return false;
+    }
+    
+    /*
      * Once the very very small page is loaded, initiate the websocket
      * connection.
      */
