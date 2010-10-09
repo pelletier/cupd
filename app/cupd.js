@@ -24,7 +24,6 @@
 
 var fs = require('fs');
 var sys = require('sys');
-var Do = require('../lib/do');
 var events = require('events');
 var express = require('express');
 var haml = require('../lib/haml');
@@ -95,18 +94,21 @@ var websocket_services_server = websocket.createServer();
 
 websocket_services_server.addListener('connection', function(conn){
 
+    sys.log("[services] new connection");
+
     var uid = createUUID();
     conn.storage.set('uid', uid);
     conn.storage.set('authenticated', false);
-    var message = { 'uid': uid };
+    var message = { 'uid': uid, 'type': 'welcome' };
     conn.send( JSON.stringify(message) );
 
 
     conn.addListener('message', function(message){
         var output = {};
+        message = JSON.parse(message);
 
         function must_authenticate() {
-            if (conn.storage.get('authenticated') == false) {
+            if (conn.storage.get('authenticated') === false) {
                 output.type = 'error';
                 output.message = 'You must be authenticated';
                 throw 'end';
@@ -115,6 +117,13 @@ websocket_services_server.addListener('connection', function(conn){
 
 
         try{
+            sys.log("Comparing " + message.uid);
+            sys.log("With " + conn.storage.get('uid'));
+            if (message.uid == undefined) {
+                output.type = 'warning';
+                output.message = 'You forgot the uid';
+                throw 'end';
+            }
             if (message.uid != conn.storage.get('uid')) {
                 output.type = 'error';
                 output.message = 'Bad uid';
@@ -123,7 +132,8 @@ websocket_services_server.addListener('connection', function(conn){
 
             switch (message.type) {
                 case "auth":
-                    conn.storage.set('name', message.name); 
+                    conn.storage.set('name', message.name);
+                    conn.storage.set('authenticated', true);
                     break;
 
                 case "data":
@@ -134,8 +144,6 @@ websocket_services_server.addListener('connection', function(conn){
                     js_message.name = conn.storage.get('name');
                     js_message.data = message.data;
 
-                    js_message = JSON.parse(js_message);
-
                     websocket_dashboard_server.broadcast(js_message);
                     output.type = 'success';
                     output.message = 'Data sent to the clients';
@@ -145,7 +153,6 @@ websocket_services_server.addListener('connection', function(conn){
                     output.type = 'error';
                     output.message = 'Bad message type';
                     throw 'end';
-                    break;
             }
         }
         catch(err) {
@@ -153,7 +160,7 @@ websocket_services_server.addListener('connection', function(conn){
                 conn.send( JSON.stringify(output) );
             }
             else {
-                sys.log(err);
+                sys.log("[services] " + err);
             }
         }
     });
@@ -247,7 +254,7 @@ app.get('/widget/:name', function(req, res){
     var read_stream = fs.createReadStream(__dirname + '/../plugins/'+name+'/widget.js');
 
     read_stream.setEncoding('utf8');
-
+    
     read_stream.addListener("open", function(fd){
         res.writeHead(200, {"Content-type": "text/javascript"});
     });
@@ -276,5 +283,7 @@ websocket_services_server.listen(app.set('websocket_services_port'));
 websocket_dashboard_server.listen(app.set('websocket_port'));
 app.listen(app.set('web_port'));
 
-sys.log("Listening...");
+sys.log("Services websocket - " + app.set('websocket_services_port'));
+sys.log("Dashboard websocket - " + app.set('websocket_port'));
+sys.log("Web dashboard - " + app.set('web_port'));
 
