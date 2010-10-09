@@ -19,7 +19,7 @@ my_code.refresh = function(){
     console.log(this);
 
     var me = $('#'+this.name);
-    me.html("<h3>Hello, world!</h3>");
+    me.html("<h3>Hello, world!</h3><p></p>");
     me.css('color', 'white');
 };
 
@@ -28,7 +28,7 @@ my_code.refresh = function(){
  * The data argument is the raw data received by the dashboard.
  */
 my_code.update = function(data){
-    console.log('Hey dude, hello_world got updated with data: '+data);
+    $('#'+this.name+' p').html(data.text);
 };
 
 /* Finaly register your code into the client's dashboard code base.

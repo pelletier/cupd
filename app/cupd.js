@@ -86,6 +86,51 @@ for (variable_name in configuration) {
 
 
 /*
+ * Create the websocket server and define its callbacks. Those are:
+ *  - connection: triggered when a new connection is established.
+ *  - close: triggered when a connection is closed (either properly or not).
+ *  - messsage: triggered when a message is received from a client. According
+ *      to the specs, it must be JSON-formatted.
+ */
+
+var websocket_dashboard_server = websocket.createServer();
+
+/* Bind websocket callbacks */
+websocket_dashboard_server.addListener('connection', function(conn){
+    sys.log('[websocket] New connection.');
+
+    /* As this is a new connection, we have to send to the client the source
+     * code of every plugins. */
+    sys.log('starting to send plugins');
+    for (plugin_name in plugins) {
+        sys.log('sending '+plugin_name);
+
+        var js_message = {};
+        js_message.name = plugin_name;
+        js_message.type = 'new_widget';
+        js_message.uri = "http://"+app.set('web_host')
+                            + ":" + app.set('web_port')
+                            + "/widget/" + plugin_name + "/";
+
+        var json_message = JSON.stringify(js_message);
+        conn.send(json_message);
+
+        sys.log('sent');
+    }
+});
+
+websocket_dashboard_server.addListener('close', function(conn){
+    /* Remove the connection from the current ones */
+    sys.log('[websocket] A connection closed.');
+});
+
+websocket_dashboard_server.addListener('message', function(message){
+   /* Not used yet */ 
+});
+
+
+
+/*
  * Create the services-side websocket server and define its callbacks.
  */
 
@@ -143,8 +188,11 @@ websocket_services_server.addListener('connection', function(conn){
                     js_message.type = 'data';
                     js_message.name = conn.storage.get('name');
                     js_message.data = message.data;
+                    js_message = JSON.stringify(js_message);
 
+                    // Fucks
                     websocket_dashboard_server.broadcast(js_message);
+
                     output.type = 'success';
                     output.message = 'Data sent to the clients';
                     break;
@@ -165,49 +213,6 @@ websocket_services_server.addListener('connection', function(conn){
         }
     });
 
-});
-
-/*
- * Create the websocket server and define its callbacks. Those are:
- *  - connection: triggered when a new connection is established.
- *  - close: triggered when a connection is closed (either properly or not).
- *  - messsage: triggered when a message is received from a client. According
- *      to the specs, it must be JSON-formatted.
- */
-
-var websocket_dashboard_server = websocket.createServer();
-
-/* Bind websocket callbacks */
-websocket_dashboard_server.addListener('connection', function(conn){
-    sys.log('[websocket] New connection.');
-
-    /* As this is a new connection, we have to send to the client the source
-     * code of every plugins. */
-    sys.log('starting to send plugins');
-    for (plugin_name in plugins) {
-        sys.log('sending '+plugin_name);
-
-        var js_message = {};
-        js_message.name = plugin_name;
-        js_message.type = 'new_widget';
-        js_message.uri = "http://"+app.set('web_host')
-                            + ":" + app.set('web_port')
-                            + "/widget/" + plugin_name + "/";
-
-        var json_message = JSON.stringify(js_message);
-        conn.send(json_message);
-
-        sys.log('sent');
-    }
-});
-
-websocket_dashboard_server.addListener('close', function(conn){
-    /* Remove the connection from the current ones */
-    sys.log('[websocket] A connection closed.');
-});
-
-websocket_dashboard_server.addListener('message', function(message){
-   /* Not used yet */ 
 });
 
 

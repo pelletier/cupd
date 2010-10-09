@@ -43,16 +43,23 @@ var websocket_onmessage = function(event) {
     /* This message must be JSON-formatted (specs) */
     var message = JSON.parse(event.data);
 
-    if (message.type == 'new_widget') {
-        var name = message.name;
-        var uri = message.uri;
+    switch (message.type) {
+        case 'new_widget':
+            var name = message.name;
+            var uri = message.uri;
+    
+            dynamic_load_js(uri, function(){
+                var new_widget = new Widget(name);
+                widgets[name] = new_widget;
+                widgets[name].refresh();
+            });
+            break;
 
-        dynamic_load_js(uri, function(){
-            var new_widget = new Widget(name);
-            widgets[name] = new_widget;
-            widgets[name].refresh();
-
-        });
+        case 'data':
+            console.log("Received data");
+            var name = message.name;
+            widgets[name].update(message.data);
+            break;
     }
 };
 

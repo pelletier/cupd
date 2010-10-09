@@ -38,7 +38,7 @@ while true do
   update_message = {
     :uid => uid,
     :type => 'data',
-    :data => { :text => "I love you!" }
+    :data => { :text => start_time.strftime("%Y-%m-%d %H:%M:%S") }
   }
 
   jsonified = update_message.to_json
