@@ -41,7 +41,7 @@ send must contain an ``uid`` field which contains this string.
 
 You now have to authenticate.
 
-    Note:
+    **Note:**
     For now, authenticating is not yet fully designed. We plan to add
     a public /private keys authentication here.
 
@@ -57,7 +57,7 @@ Send a message like the following:
 
 Your application name must be consistent with the one you use in your widget.
 
-    Note:
+    **Note:**
     The authentication will enable a strict check of the uniqueness of your
     application name in a future release.
 

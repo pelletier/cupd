@@ -73,6 +73,10 @@ blockquote {
     border-left: 5px solid rgb(102,102,102);
 }
 
+blockquote strong:first-child{
+    color: rgb(166, 227, 25);
+}
+
 strong {
     color: #FD971F;
 }

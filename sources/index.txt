@@ -34,6 +34,16 @@ Once the plugin is initialized, you can switch back to your web browser and see
 a nice ``Hello world`` with the local time running above.
 
 
+Questions? Want to get involved?
+--------------------------------
+
+Pick one:
+
+- Fork and request a pull on GitHub.
+- Drop me `an email <thomas.about.cupd@pelletier.im>`_.
+- Get in touch on `Twitter <http://twitter.com/kizlum/>`_.
+
+
 Contents
 --------
 
@@ -41,6 +51,7 @@ Contents
    :maxdepth: 2
    
    services_api
+   widgets
 
 * :ref:`search`
 
