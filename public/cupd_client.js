@@ -77,7 +77,7 @@ function Widget(name) {
     /* Retain its name */
     this.name = name;
     /* Create a new div to display in */
-    $('body').append("<div class='widget' id='"+this.name+"'></div>");
+    $('body').append("<div class='wrapper' id='"+this.name+"-parent'><span class='title'></span><div class='widget' id='"+this.name+"'></div></div>");
 
     /* Grab its loaded code base */
     var code = code_base[name];
@@ -85,6 +85,24 @@ function Widget(name) {
     /* Associate the given code */
     this.refresh = code.refresh;
     this.update = code.update;
+    this.title = code.title
+    
+    /* Set the title event */
+    $('#'+this.name+'-parent .title').change(function(){});
+    
+    /* Define the set_title(new_title) method */
+    this.set_title = function(new_title) {
+        $('#'+this.name+'-parent .title').html(new_title);
+    }
+    
+    /* Use it to define the default title */
+    if (this.title != undefined) {
+        this.set_title(this.title);
+    }
+    else { // Fall back on the name
+        this.set_title(this.name);
+    }
+
 }
 
 /*
