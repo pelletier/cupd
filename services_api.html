@@ -25,18 +25,8 @@
     <link rel="prev" title="Cupd, real time dashboard" href="index.html" /> 
   </head>
   <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="index.html" title="Cupd, real time dashboard"
-             accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Cupd v1.0 documentation</a> &raquo;</li> 
-      </ul>
-    </div>  
+<a href="http://github.com/pelletier/cupd"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub" /></a>
+
 
     <div class="document">
       <div class="documentwrapper">
@@ -48,7 +38,6 @@
 <p>Services API is the entry point for data providers. It is built on top of
 websocket. So first of all, pick a websocket <strong>client</strong> library for your
 favorite language:</p>
-<blockquote>
 <ul class="simple">
 <li>Python: <a class="reference external" href="http://github.com/mtah/python-websocket">http://github.com/mtah/python-websocket</a></li>
 <li>Ruby: <a class="reference external" href="http://github.com/gimite/web-socket-ruby">http://github.com/gimite/web-socket-ruby</a></li>
@@ -57,7 +46,6 @@ favorite language:</p>
 <li>Erlang: <a class="reference external" href="http://github.com/davebryson/erlang_websocket">http://github.com/davebryson/erlang_websocket</a></li>
 <li>...</li>
 </ul>
-</blockquote>
 <p>Once you&#8217;ve got familiar with it read further.</p>
 <div class="section" id="how-it-works">
 <h2>How it works<a class="headerlink" href="#how-it-works" title="Permalink to this headline">¶</a></h2>
@@ -67,9 +55,9 @@ data. All the exchanges are JSON-formatted, and must follow a given structure.</
 <div class="section" id="handshake">
 <h2>Handshake<a class="headerlink" href="#handshake" title="Permalink to this headline">¶</a></h2>
 <p>Once you are connected to the server, it will send you the following message:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
-    <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;welcome&quot;</span><span class="p">,</span>
-    <span class="s">&quot;uid&quot;</span><span class="p">:</span> <span class="s">&quot;ACA764FEF7ED43D3BF7D31472B952987&quot;</span>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="p">{</span>
+    <span class="s2">&quot;type&quot;</span><span class="o">:</span> <span class="s2">&quot;welcome&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;uid&quot;</span><span class="o">:</span> <span class="s2">&quot;ACA764FEF7ED43D3BF7D31472B952987&quot;</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -83,10 +71,10 @@ Note:
 For now, authenticating is not yet fully designed. We plan to add
 a public /private keys authentication here.</blockquote>
 <p>Send a message like the following:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
-    <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;auth&quot;</span><span class="p">,</span>
-    <span class="s">&quot;uid&quot;</span><span class="p">:</span> <span class="s">&quot;ACA764FEF7ED43D3BF7D31472B952987&quot;</span><span class="p">,</span>
-    <span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;your_app&quot;</span><span class="p">,</span>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="p">{</span>
+    <span class="s2">&quot;type&quot;</span><span class="o">:</span> <span class="s2">&quot;auth&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;uid&quot;</span><span class="o">:</span> <span class="s2">&quot;ACA764FEF7ED43D3BF7D31472B952987&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;name&quot;</span><span class="o">:</span> <span class="s2">&quot;your_app&quot;</span><span class="p">,</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -96,46 +84,68 @@ Note:
 The authentication will enable a strict check of the uniqueness of your
 application name in a future release.</blockquote>
 </div>
+<div class="section" id="sending-data">
+<h2>Sending data<a class="headerlink" href="#sending-data" title="Permalink to this headline">¶</a></h2>
+<p>Now that the Cupd server trusts you (ahem), you can start sending payloads of
+data. To do so, just send a message like the following:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="p">{</span>
+    <span class="s2">&quot;type&quot;</span><span class="o">:</span> <span class="s2">&quot;data&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;data&quot;</span><span class="o">:</span> <span class="o">&lt;</span><span class="nx">Your</span> <span class="nx">JSON</span> <span class="nx">formated</span> <span class="nx">data</span><span class="o">&gt;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Pretty simple, yes? You data can obviously be a string, an hash, a list and so
+on. Your widget will receive the exact content of the <tt class="docutils literal"><span class="pre">data</span></tt> field, but
+de-serialized.</p>
+</div>
 </div>
 
 
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Services API</a><ul>
-<li><a class="reference internal" href="#how-it-works">How it works</a></li>
-<li><a class="reference internal" href="#handshake">Handshake</a></li>
+<div id="sphinxsidebar">
+  <div class="sphinxsidebarwrapper">
+
+      <h2 id="logo">Cupd</h2>
+
+        <ul>
+            <li class="toctree-l1">
+                <a href="index.html">Main Page</a>
+            </li>
+        </ul>
+        <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">Services API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#how-it-works">How it works</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#handshake">Handshake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sending-data">Sending data</a></li>
 </ul>
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="index.html"
-                        title="previous chapter">Cupd, real time dashboard</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="sources/services_api.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" size="18" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
+      <h3>This Page</h3>
+      <ul class="this-page-menu">
+        <li><a href="sources/services_api.txt"
+               rel="nofollow">Show Source</a></li>
+      </ul>
+    <div id="searchbox" style="display: none">
+      
+        <form class="search" action="search.html" method="get">
+			<div class="search-wrapper">
+			<span class="search-left"></span>
+			<input class="prettysearch" type="text" name="q" size="18" />
+			<span class="search-right">&nbsp;</span>
+			</div>
+          <input type="submit" value="Search" class="searchbutton" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('#searchbox').show(0);</script>
+  </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
+
+
       <div class="clearer"></div>
     </div>
     <div class="footer">
