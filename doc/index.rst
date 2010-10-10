@@ -8,17 +8,39 @@ kind of data source (RSS feeds, IRC chat, web statistics, video streaming and
 so on) and broadcast it to an unlimited number of users, through an highly
 customizable dashboard interface.
 
-Contents:
+
+Quickstart
+----------
+
+You must have nodejs and a websocket-capable web browser installed. Once you
+are ready, do something like this:
+
+.. code-block:: bash
+    
+    $ git clone git://github.com/pelletier/cupd.git
+    $ cd cupd
+    $ node app/cupd.js
+
+Your Cupd dashboard is now available on `<http://localhost:3000/>`_. However,
+without services (ie, data sources), it is not really interesting. Fire another
+terminal, and:
+
+.. code-block:: bash
+    
+    $ cd cupd/plugins/hello_world
+    $ ruby hello_world.rb
+
+Once the plugin is initialized, you can switch back to your web browser and see
+a nice ``Hello world`` with the local time running above.
+
+
+Contents
+--------
 
 .. toctree::
    :maxdepth: 2
    
    services_api
 
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`
 
