@@ -7,12 +7,12 @@ Services API is the entry point for data providers. It is built on top of
 websocket. So first of all, pick a websocket **client** library for your
 favorite language:
 
-    - Python: `<http://github.com/mtah/python-websocket>`_
-    - Ruby: `<http://github.com/gimite/web-socket-ruby>`_
-    - Javascript: `<http://github.com/guille/node.websocket.js/>`_
-    - Java: `<http://github.com/adamac/Java-WebSocket-client>`_
-    - Erlang: `<http://github.com/davebryson/erlang_websocket>`_
-    - ...
+ - Python: `<http://github.com/mtah/python-websocket>`_
+ - Ruby: `<http://github.com/gimite/web-socket-ruby>`_
+ - Javascript: `<http://github.com/guille/node.websocket.js/>`_
+ - Java: `<http://github.com/adamac/Java-WebSocket-client>`_
+ - Erlang: `<http://github.com/davebryson/erlang_websocket>`_
+ - ...
 
 Once you've got familiar with it read further.
 
