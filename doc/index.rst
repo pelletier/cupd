@@ -51,6 +51,7 @@ Contents
    :maxdepth: 2
    
    services_api
+   widgets
 
 * :ref:`search`
 
