@@ -1,0 +1,215 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Widgets &mdash; Cupd v1.0 documentation</title>
+    <link rel="stylesheet" href="static/cupd.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="static/jquery.js"></script>
+    <script type="text/javascript" src="static/underscore.js"></script>
+    <script type="text/javascript" src="static/doctools.js"></script>
+    <link rel="top" title="Cupd v1.0 documentation" href="index.html" />
+    <link rel="prev" title="Services API" href="services_api.html" /> 
+  </head>
+  <body>
+<a href="http://github.com/pelletier/cupd"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub" /></a>
+
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="widgets">
+<span id="id1"></span><h1>Widgets<a class="headerlink" href="#widgets" title="Permalink to this headline">¶</a></h1>
+<p>Your widget is the dedicated area on which you will display your very
+interesting data on the screens of your customers (I mean end-users).</p>
+<p>Here is a widget example (in fact, it is the <a class="reference external" href="http://github.com/pelletier/cupd/tree/master/plugins/hello_world/">hello_world</a> example):</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="cm">/*</span>
+<span class="cm"> * Hello world</span>
+<span class="cm"> *</span>
+<span class="cm"> * An example widget for Cupd.</span>
+<span class="cm"> * It is meant to show the minimal requirements for building a working Cupd</span>
+<span class="cm"> * widget. Please read the corresponding wiki pages for more informations.</span>
+<span class="cm"> */</span>
+
+<span class="cm">/* Your exported code must stay in a single object */</span>
+<span class="nx">my_code</span> <span class="o">=</span> <span class="p">{};</span>
+
+<span class="cm">/* The refresh function is called by the dashboard to force your widget to</span>
+<span class="cm"> * display nicely (for instance when the user loads the page, or changes</span>
+<span class="cm"> * critical display settings).</span>
+<span class="cm"> */</span>
+<span class="nx">my_code</span><span class="p">.</span><span class="nx">refresh</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="kd">var</span> <span class="nx">me</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="o">+</span><span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span>
+    <span class="nx">me</span><span class="p">.</span><span class="nx">html</span><span class="p">(</span><span class="s2">&quot;&lt;h3&gt;Hello, world!&lt;/h3&gt;&lt;p&gt;&lt;/p&gt;&quot;</span><span class="p">);</span>
+    <span class="nx">me</span><span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;color&#39;</span><span class="p">,</span> <span class="s1">&#39;white&#39;</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="cm">/* The update function is called when your widget receives some informations</span>
+<span class="cm"> * from its server-side friendly plugin.</span>
+<span class="cm"> * The data argument is the raw data received by the dashboard.</span>
+<span class="cm"> */</span>
+<span class="nx">my_code</span><span class="p">.</span><span class="nx">update</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
+    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="o">+</span><span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39; p&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">text</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="cm">/* Finaly register your code into the client&#39;s dashboard code base.</span>
+<span class="cm"> * &#39;hello_world&#39; is the slugified name of the plugin. It is the plugin</span>
+<span class="cm"> * identifier, so stay consistent otherwise your code will be doomed.</span>
+<span class="cm"> */</span>
+<span class="nx">code_base</span><span class="p">[</span><span class="s1">&#39;hello_world&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nx">my_code</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Widgets are plain javascript. However, please note two things: firstly, the
+dashboard is <a class="reference external" href="http://jquery.com/">jQuery</a> powered, hence it is available to
+you, so feel free to use it . Secondly, Cupd exposes an API and provides some
+guidelines. It is very recommended to use them <em>both</em>.</p>
+<p>Concerning the file system, your widget has a dedicated space to live in:
+<tt class="docutils literal"><span class="pre">/plugins/&lt;your_widget_name&gt;/</span></tt> (I will refer to it has &#8220;your widget space&#8221; in
+the rest of the document&#8221;).</p>
+<blockquote>
+<div><strong>Guideline:</strong>
+Use only alphanumeric characters and underscores in your widget
+name. And avoid using spaces too.</div></blockquote>
+<div class="section" id="needed-skeleton">
+<h2>Needed skeleton<a class="headerlink" href="#needed-skeleton" title="Permalink to this headline">¶</a></h2>
+<p>You absolutely need one file in your widget space: <tt class="docutils literal"><span class="pre">widget.js</span></tt>. It will
+contains your code which will handle display refreshes and data payloads.
+This code is loaded dynamically by the user&#8217;s browser. You must create an empty
+object which is going to be registered to the dashboard. It must contains two
+functions: <tt class="docutils literal"><span class="pre">update(data)</span></tt> and <tt class="docutils literal"><span class="pre">refresh()</span></tt>. Then you must register your
+widget to the dashboard using the <tt class="docutils literal"><span class="pre">code_base</span></tt> global variable. Let&#8217;s dig
+a little deeper on all of this.</p>
+</div>
+<div class="section" id="your-widget-object">
+<h2>Your widget object<a class="headerlink" href="#your-widget-object" title="Permalink to this headline">¶</a></h2>
+<p>In all your functions, you can use the <tt class="docutils literal"><span class="pre">this</span></tt> statement to refer to your
+widget. It is the same object you register with the <tt class="docutils literal"><span class="pre">code_base</span></tt> variable, but
+it also contains:</p>
+<ul class="simple">
+<li>The <tt class="docutils literal"><span class="pre">name</span></tt> property, which is unique ID generated by the dashboard to refer
+as the current instance of your widget.</li>
+<li>(nothing else for now: more to come)</li>
+</ul>
+</div>
+<div class="section" id="handling-refreshes">
+<h2>Handling refreshes<a class="headerlink" href="#handling-refreshes" title="Permalink to this headline">¶</a></h2>
+<p>First of all, you need to know that when your widget is loaded (ie, when the
+users connects to Cupd), the dashboard automatically creates a <tt class="docutils literal"><span class="pre">div</span></tt> on the
+page, with your widget&#8217;s name as its <tt class="docutils literal"><span class="pre">id</span></tt> field. What is going to be
+displayed in this div is up to you, and the <tt class="docutils literal"><span class="pre">refresh()</span></tt> method.</p>
+<p>Example:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">my_code</span><span class="p">.</span><span class="nx">refresh</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="kd">var</span> <span class="nx">me</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="o">+</span><span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span> <span class="c1">// We first grab that so important div</span>
+    <span class="nx">me</span><span class="p">.</span><span class="nx">html</span><span class="p">(</span><span class="s2">&quot;&lt;h3&gt;Hello, world!&lt;/h3&gt;&lt;p&gt;&lt;/p&gt;&quot;</span><span class="p">);</span> <span class="c1">// Let&#39;s display the skeleton</span>
+                                              <span class="c1">// of widget.</span>
+    <span class="nx">me</span><span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;color&#39;</span><span class="p">,</span> <span class="s1">&#39;white&#39;</span><span class="p">);</span> <span class="c1">// Add some style</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>Not really difficult. The refresh function is not called very often: only when
+the user loads the page, and if he plays enough with its window this so that
+the engine is not able to redraw widgets properly (which is rather rare).</p>
+</div>
+<div class="section" id="handling-incoming-data">
+<h2>Handling incoming data<a class="headerlink" href="#handling-incoming-data" title="Permalink to this headline">¶</a></h2>
+<p>Because you want to display data, you must receive them first. It is the main
+purpose of the <tt class="docutils literal"><span class="pre">update(data)</span></tt> method. It is fired each time some new data for
+your widget is received by the dashboard. <tt class="docutils literal"><span class="pre">data</span></tt> is a Javascript object: the
+payload sent by your service has been de-serialized by the dashboard.</p>
+<p>Example:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">my_code</span><span class="p">.</span><span class="nx">update</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
+    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="o">+</span><span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="o">+</span><span class="s1">&#39; p&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">text</span><span class="p">);</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>In this example, the widget receives an hash, containing one key: <tt class="docutils literal"><span class="pre">text</span></tt>, so
+it changes the value of the previously created <tt class="docutils literal"><span class="pre">&lt;p&gt;</span></tt> (see refresh) to the
+freshly received text.</p>
+</div>
+<div class="section" id="registering">
+<h2>Registering<a class="headerlink" href="#registering" title="Permalink to this headline">¶</a></h2>
+<p>It&#8217;s the easiest part, and also the most important. Once all your methods have
+been implemented, you must register your widget with its proper name using the
+global <tt class="docutils literal"><span class="pre">code_base</span></tt> hash.</p>
+<p>Example:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">code_block</span><span class="p">[</span><span class="s1">&#39;my_widget_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nx">my_code</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>And... it is over! You&#8217;ve done your job and your users are ready to enjoy your
+real time data.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+<div id="sphinxsidebar">
+  <div class="sphinxsidebarwrapper">
+
+      <h2 id="logo">Cupd</h2>
+
+        <ul>
+            <li class="toctree-l1">
+                <a href="index.html">Main Page</a>
+            </li>
+        </ul>
+        <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="services_api.html">Services API</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Widgets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#needed-skeleton">Needed skeleton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#your-widget-object">Your widget object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#handling-refreshes">Handling refreshes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#handling-incoming-data">Handling incoming data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#registering">Registering</a></li>
+</ul>
+</li>
+</ul>
+
+      <h3>This Page</h3>
+      <ul class="this-page-menu">
+        <li><a href="sources/widgets.txt"
+               rel="nofollow">Show Source</a></li>
+      </ul>
+    <div id="searchbox" style="display: none">
+      
+        <form class="search" action="search.html" method="get">
+			<div class="search-wrapper">
+			<span class="search-left"></span>
+			<input class="prettysearch" type="text" name="q" size="18" />
+			<span class="search-right">&nbsp;</span>
+			</div>
+          <input type="submit" value="Search" class="searchbutton" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('#searchbox').show(0);</script>
+  </div>
+</div>
+
+
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010, Thomas Pelletier.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

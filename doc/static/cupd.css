@@ -1,0 +1,87 @@
+@import url('monokai.css');
+
+body {
+    background-color: rgb(26, 28, 29);
+    color: white;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: Helvetica, sans-serif;
+}
+
+a {
+    color: rgb(250, 37, 115);
+}
+
+#sphinxsidebar {
+    float: right;
+    border-left: 2px dashed rgb(128,128, 122);
+    padding-left: 1em;
+    padding-right: 1em;
+    max-width: 250px;
+}
+
+.related {
+    display: none;
+}
+
+.headerlink {
+    font-size: 0.7em;
+    margin-left: 1em;
+    text-decoration: none;
+    color: rgb(68, 68, 68);
+    position: relative;
+    top: -2px;
+}
+
+h1 {
+    color: rgb(166, 227, 25);
+}
+
+
+.bodywrapper {
+    float: left;
+    max-width: 600px;
+}
+
+.body h2:before{
+    content: ">";
+    position: relative;
+    left: -15px;
+    top: -2px;
+    color: rgb(68, 68, 68);
+}
+
+.body h2{
+    position: relative;
+    left: -15px;
+}
+
+.clearer {
+    clear: both;
+}
+
+.footer {
+    text-align: center;
+    margin-top: 40px;
+    color: #666666;
+    font-size: 0.8em;
+}
+
+blockquote {
+    padding-left: 4px;
+    border-left: 5px solid rgb(102,102,102);
+}
+
+blockquote strong:first-child{
+    color: rgb(166, 227, 25);
+}
+
+strong {
+    color: #FD971F;
+}
+
+span.pre{
+    background-color: #1B1D1E;
+    color: #666666;
+}
