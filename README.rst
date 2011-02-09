@@ -33,6 +33,14 @@ terminal, and::
 Once the plugin is initialized, you can switch back to your web browser and see
 a nice ``Hello world`` with the local time running above.
 
+Lean more
+---------
+
+Read the documentation:
+
+ - `Online. <http://pelletier.github.com/cupd/>`_
+ - In the docs/ folder using `Sphinx <http://sphinx.pocoo.org/>`_.
+
 Questions? Getting involved?
 ----------------------------
 
