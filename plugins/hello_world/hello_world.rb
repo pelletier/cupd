@@ -2,12 +2,15 @@
 
 require 'rubygems'
 require 'json'
-require 'web_socket'
+require './web_socket.rb'
 
 
 puts("Hello world Cupd server example")
 
-client = WebSocket.new("ws://192.168.0.42:8001/")
+puts("Please enter IP address of the Cupd Websocket server: ")
+ip = gets.chomp
+
+client = WebSocket.new("ws://#{ip}:8001/")
 
 uid = nil
 

@@ -48,10 +48,11 @@ Contents
 --------
 
 .. toctree::
-   :maxdepth: 2
-   
-   services_api
-   widgets
+    :maxdepth: 2
+    
+    installation
+    services_api
+    widgets
 
 * :ref:`search`
 

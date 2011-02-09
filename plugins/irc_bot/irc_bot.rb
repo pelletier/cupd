@@ -3,20 +3,23 @@
 require 'rubygems'
 require 'json'
 require 'socket'
-require 'web_socket'
+require './web_socket.rb'
 
 
 $SAFE = 1
 
 $UID = nil;
 
+puts("Please enter IP address of the Cupd Websocket server: ")
+ip = gets.chomp
+
+websocket_client = WebSocket.new("ws://#{ip}:8001/") 
 
 class IRC
   def initialize(server, port, nick, channel)
-    @websocket_client = WebSocket.new("ws://192.168.0.42:8001/") 
 
     Thread.new() do
-      while data = @websocket_client.receive()
+      while data = websocket_client.receive()
         data = JSON.parse(data)
         if data['type'] == 'welcome'
           $UID = data['uid']
@@ -27,7 +30,7 @@ class IRC
             :name => 'irc_bot'
           }
 
-          @websocket_client.send(auth_message.to_json)
+          websocket_client.send(auth_message.to_json)
 
         end
       end
@@ -77,7 +80,7 @@ class IRC
               }
           }
 
-          @websocket_client.send( update_message.to_json )
+          websocket_client.send( update_message.to_json )
         end
       else
         puts s 
