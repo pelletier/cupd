@@ -1,0 +1,20 @@
+{
+    "dashboard": {
+        "port": 3000,
+        "style": "default",
+        "layout": "flexiblegrid",
+        "websocket": {
+            "port": 3001
+        }
+    },
+
+    "services": {
+        "websocket": {
+            "port": 8000
+        },
+        "list": {
+            "hello-world": "this is alice",
+            "clock": "this is dog"
+        }
+    }
+}

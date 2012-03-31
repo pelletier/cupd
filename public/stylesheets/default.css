@@ -1,0 +1,30 @@
+html {
+    padding: 0px;
+    margin: 0px;
+}
+body {
+  padding: 0px;
+  margin: 0px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color: #ddd;
+}
+
+a {
+  color: #00B7FF;
+}
+
+#banner {
+    background-color: #444;
+    border-bottom: 4px solid #aaa;
+    color: #FFF;
+}
+
+#banner h1 {
+    margin: 0px;
+    padding: 8px;
+}
+
+#dashboard div.widget {
+    border: 1px solid #999;
+    float: left;
+}
