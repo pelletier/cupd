@@ -3,6 +3,8 @@ html(lang="en")
     head
         title Cupd Dashboard
         link(rel="stylesheet", type="text/css", href="/stylesheets/"+style+".css")
+        script(type="text/javascript")
+            var WEBSOCKET_SERVER = "#{ws_server}";
         script(type="text/javascript", src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js")
         script(type="text/javascript", src="/javascripts/"+dashlayout+".js")
         script(type="text/javascript", src="/javascripts/dashboard.js")
