@@ -5,6 +5,7 @@ var register = new Object();
 /* Register a new widget.
  * Loads the code and create fully working widget object */
 function register_widget(widget) {
+    console.log("Registering " + widget.id);
     widget.place_height = 0;
     widget.place_width = 0;
 
@@ -15,6 +16,13 @@ function register_widget(widget) {
     widgets.push(widget);
 
     $("#dashboard").append("<div class=\"widget\" id=\""+widget.id+"\"></div>");
+
+    try {
+        widget.init(widget.get_place());
+    }
+    catch(e) {
+        console.log("Widget init failure: " + e);
+    }
 }
 
 /* Compute the layout and redraw every widget. */
@@ -49,10 +57,13 @@ function websocket_onmessage(evt) {
     console.log("Websocket message received.");
     var data = JSON.parse(evt.data);
 
+
     switch(data["type"]) {
         case "new_widget":
             var name = data["name"];
+            console.log("widget " + name);
             $.getScript("/"+name+"/"+name+".js", function (s, textStatus) {
+                console.log(textStatus);
                 register_widget(register[name]);
                 delete register[name];
                 draw_widgets();

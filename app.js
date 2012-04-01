@@ -118,6 +118,9 @@ services_ws.on('connection', function(ws) {
     ws.on('message', function(message) {
         var data = JSON.parse(message);
 
+        util.log("message received");
+        util.log(message);
+
         switch(data['type']) {
             case 'auth':
                 if (services_passwords[data['id']] == data['password']) {
@@ -155,7 +158,10 @@ services_ws.on('connection', function(ws) {
                             'id': this.id,
                             'data': data['data']
                         };
-                        c.send(JSON.stringify(msg));
+                        try {
+                            c.send(JSON.stringify(msg));
+                        }
+                        catch(err) {}
                     }
                     // TODO: Send a response to the service?
                 }

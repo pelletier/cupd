@@ -6,6 +6,8 @@ widget.sources = []; // Does not register any source.
 
 widget.draw = function(place) {
     place.html("Hello world");
+    place.css("text-align", "center");
+    place.css("font-size", "150%");
 };
 
 widget.on_data = function(place, data) {

@@ -14,8 +14,9 @@
             "port": 8000
         },
         "list": {
-            "hello-world": "this is alice",
-            "clock": "this is dog"
+            "irc_bot": "this is alice",
+            "clock": "this is dog",
+            "random": "another password"
         }
     }
 }
