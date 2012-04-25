@@ -53,14 +53,11 @@ function websocket_onclose() {
 
 /* WebSocket message received callback */
 function websocket_onmessage(evt) {
-    console.log("Websocket message received.");
     var data = JSON.parse(evt.data);
-
 
     switch(data["type"]) {
         case "new_widget":
             var name = data["name"];
-            console.log("widget " + name);
             $.getScript("/"+name+"/"+name+".js", function (s, textStatus) {
                 console.log(textStatus);
                 register_widget(register[name]);
@@ -68,6 +65,15 @@ function websocket_onmessage(evt) {
                 draw_widgets();
             });
             break;
+
+        case "new_theme":
+            var name = data["name"];
+            $("#options #themes-list").append('<option value="'+name+'">'+name+'</option>');
+            break;
+
+        case "new_layout":
+            var name = data['name'];
+            $("#options #layouts-list").append('<option value="'+name+'">'+name+'</option>');
 
         case "data":
             var id = data['id'];
@@ -112,4 +118,15 @@ $(document).ready(function(){
 
     // Draw for the first time.
     draw_widgets();
+
+    // Bind theme selection change.
+    $("#options #themes-list").change(function(){
+        var new_theme = $(this).attr('value');
+        $("head link").remove();
+        $("<link />", {
+            rel: "stylesheet",
+            type: "text/css",
+            href: "/stylesheets/" + new_theme
+        }).appendTo("head");
+    });
 });

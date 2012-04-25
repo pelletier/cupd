@@ -68,10 +68,32 @@ fs.readdir("./widgets/", function(err, files) {
     util.log("= " + plugins.join(", "));
 });
 
+/* Load themes stylsheets */
+var themes = [];
+fs.readdir("./public/stylesheets/", function(err, files) {
+    util.log("Loading themes");
+
+    themes =  files.filter(function(f) { return f.match(/\.css$/) });
+
+    util.log("= " + themes.join(", "));
+});
+
+/* Load layouts */
+var layouts = [];
+fs.readdir("./public/layouts/", function(err, files) {
+    util.log("Loading layouts");
+
+    layouts =  files.filter(function(f) { return f.match(/\.js$/) });
+
+    util.log("= " + themes.join(", "));
+});
+
 /* Create the server */
 var clients = [];
 var dash_ws = new ws.Server(app.set('conf')["dashboard"]["websocket"]);
 util.log("* Dashboard WebSocket server - " + dash_ws.options.port);
+
+
 
 dash_ws.on('connection', function(ws) {
     // TODO: Just one message should be sent.
@@ -81,6 +103,20 @@ dash_ws.on('connection', function(ws) {
             "type": "new_widget",
             "name": plugins[index]
         };
+        ws.send(JSON.stringify(message));
+    }
+    for (index in themes) {
+        var message = {
+            "type": "new_theme",
+            "name": themes[index]
+        }
+        ws.send(JSON.stringify(message));
+    }
+    for (index in layouts) {
+        var message = {
+            "type": "new_layout",
+            "name": layouts[index]
+        }
         ws.send(JSON.stringify(message));
     }
     clients.push(ws);
@@ -117,9 +153,6 @@ services_ws.on('connection', function(ws) {
 
     ws.on('message', function(message) {
         var data = JSON.parse(message);
-
-        util.log("message received");
-        util.log(message);
 
         switch(data['type']) {
             case 'auth':

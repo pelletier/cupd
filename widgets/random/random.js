@@ -18,7 +18,6 @@ widget.init = function(place) {
     ph.height(100);
 
     var a = place.find("#placeholder");
-    console.log(a.width());
 
     this.plot = $.plot(place.find("#placeholder"), [], options);
 };
@@ -26,18 +25,12 @@ widget.init = function(place) {
 widget.draw = function(place) {
     place = this.get_place();
     var ph = place.find("#placeholder");
-    console.log(ph.width());
-    console.log(place.width());
     ph.width(place.width());
     ph.height(place.height());
     this.plot.resize();
-    console.log(this.plot.width());
 };
 
 widget.on_data = function(place, data) {
-    console.log(this);
-    console.log(this.plot.height());
-
     this.plot.setData([data]);
     this.plot.setupGrid();
     this.plot.draw();

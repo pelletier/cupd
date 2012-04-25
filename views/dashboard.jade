@@ -2,15 +2,21 @@ doctype 5
 html(lang="en")
     head
         title Cupd Dashboard
-        link(rel="stylesheet", type="text/css", href="/stylesheets/"+style+".css")
+        link(rel="stylesheet", type="text/css", href="/stylesheets/"+style)
         script(type="text/javascript")
             var WEBSOCKET_SERVER = "#{ws_server}";
         script(type="text/javascript", src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js")
         script(type="text/javascript", src="https://raw.github.com/flot/flot/master/jquery.flot.js")
         script(type="text/javascript", src="https://raw.github.com/flot/flot/master/jquery.flot.resize.js")
-        script(type="text/javascript", src="/javascripts/"+dashlayout+".js")
+
+        script(type="text/javascript", src="/layouts/"+dashlayout)
         script(type="text/javascript", src="/javascripts/dashboard.js")
     body
         div(id="banner")
             h1 Dashboard
+            #options
+                #theme Theme:
+                    select(id="themes-list")
+                #layout Layout:
+                    select(id="layouts-list")
         div(id="dashboard")
