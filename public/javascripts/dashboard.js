@@ -3,7 +3,7 @@ var widgets = [];
 var register = new Object();
 
 /* Register a new widget.
- * Loads the code and create fully working widget object */
+ * Loads the code and create a fully working widget object. */
 function register_widget(widget) {
     console.log("Registering " + widget.id);
     widget.place_height = 0;
@@ -39,7 +39,6 @@ function draw_widgets() {
         place.height(w.place_height);
         w.draw(place);
     }
-
 }
 
 /* WebSocket connection opened callback */

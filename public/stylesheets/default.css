@@ -27,4 +27,6 @@ a {
 #dashboard div.widget {
     border: 1px solid #999;
     float: left;
+    padding: 5px;
+    margin: 15px;
 }

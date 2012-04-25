@@ -23,15 +23,23 @@ function layout(widgets, dashboard_width, dashboard_height) {
 
     output_w = [];
 
+    console.log("Computing the grid");
+
     for (row_i in rows) {
+        console.log("-> Row " + row_i);
         var row = rows[row_i][0];
         var height = rows[row_i][1];
-        var width = dashboard_width / row.length - 2;
+        var ex_place = row[0].get_place();
+        var delta = ex_place.outerWidth(true) - ex_place.width();
+        var width = dashboard_width / row.length - delta - 1;
+        console.log("Δ="+delta);
+        console.log("width="+width);
 
         for (index in row) {
             var w = row[index];
             w.place_width = width;
             w.place_height = height;
+            console.log(w);
             output_w.push(w);
         }
     }
